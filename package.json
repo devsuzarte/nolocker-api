@@ -1,0 +1,25 @@
+{
+  "name": "nolocker-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@fastify/multipart": "^9.0.3",
+    "dotenv": "^16.5.0",
+    "fastify": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/busboy": "^1.5.4",
+    "@types/node": "^22.15.19",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
