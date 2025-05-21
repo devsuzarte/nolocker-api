@@ -1,0 +1,9 @@
+services:
+  - type: api
+    name: unlocker
+    env: docker
+    repo: https://github.com/devsuzarte/nolocker-api
+    branch: main
+    plan: free
+    dockerfilePath: Dockerfile
+    autoDeploy: true
