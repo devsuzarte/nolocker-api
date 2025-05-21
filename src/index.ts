@@ -49,9 +49,6 @@ async function UnlockController(request: FastifyRequest, reply: FastifyReply) {
             return reply.status(status).send({ message, body })
         }
 
-        // fs.unlink(lockedFilePath, () => {})
-        // fs.unlink(unlockedFilePath, () => {})
-
         return reply
             .status(status)
             .header("content-type", "application/pdf")
