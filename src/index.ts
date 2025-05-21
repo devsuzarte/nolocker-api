@@ -46,20 +46,20 @@ async function UnlockController(request: FastifyRequest, reply: FastifyReply) {
         const { status, message, body } = await UnlockUseCase(unclockInput);
 
         if(status !== 200) {
-            reply.status(status).send({ message, body })
+            return reply.status(status).send({ message, body })
         }
+
+        // fs.unlink(lockedFilePath, () => {})
+        // fs.unlink(unlockedFilePath, () => {})
 
         return reply
             .status(status)
             .header("content-type", "application/pdf")
-            .header("content-disposition", `attachment; filename="unlocked.pdf"`)
-            .send({
-                message,
-                body
-            })
+            .header("content-disposition", `attachment; filename="${Date.now()}.pdf"`)
+            .send(body)
 
     } catch (error) {
-        reply.send(500).send({ message: "Internal server error." })
+        return reply.send(500).send({ message: "Internal server error." })
     }
 }
 
@@ -85,9 +85,9 @@ async function UnlockUseCase(unlockInfos: UnlockInput): Promise<AppResponse> {
         const execAsync = promisify(exec);
         const pump = promisify(require("stream").pipeline);
 
-        await pump(file, fs.createWriteStream(lockedFilePath))
+        await pump(file?.file, fs.createWriteStream(lockedFilePath))
         await execAsync(`qpdf --password=${password} --decrypt "${lockedFilePath}" "${unlockedFilePath}"`)
-        
+
         return {
             status: 200,
             message: "File has been unlocked successfully!",
@@ -101,11 +101,6 @@ async function UnlockUseCase(unlockInfos: UnlockInput): Promise<AppResponse> {
             status: 400,
             message: "An error has occurred while trying to unlock the PDF!"
         }
-    }
-
-    finally {
-        fs.unlink(lockedFilePath, () => {})
-        fs.unlink(unlockedFilePath, () => {})
     }
 }
 

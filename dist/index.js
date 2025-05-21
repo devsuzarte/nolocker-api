@@ -34,19 +34,18 @@ async function UnlockController(request, reply) {
         }
         const { status, message, body } = await UnlockUseCase(unclockInput);
         if (status !== 200) {
-            reply.status(status).send({ message, body });
+            return reply.status(status).send({ message, body });
         }
+        // fs.unlink(lockedFilePath, () => {})
+        // fs.unlink(unlockedFilePath, () => {})
         return reply
             .status(status)
             .header("content-type", "application/pdf")
-            .header("content-disposition", `attachment; filename="unlocked.pdf"`)
-            .send({
-            message,
-            body
-        });
+            .header("content-disposition", `attachment; filename="${Date.now()}.pdf"`)
+            .send(body);
     }
     catch (error) {
-        reply.send(500).send({ message: "Internal server error." });
+        return reply.send(500).send({ message: "Internal server error." });
     }
 }
 // Use Cases
@@ -59,7 +58,7 @@ async function UnlockUseCase(unlockInfos) {
     try {
         const execAsync = (0, util_1.promisify)(child_process_1.exec);
         const pump = (0, util_1.promisify)(require("stream").pipeline);
-        await pump(file, fs_1.default.createWriteStream(lockedFilePath));
+        await pump(file?.file, fs_1.default.createWriteStream(lockedFilePath));
         await execAsync(`qpdf --password=${password} --decrypt "${lockedFilePath}" "${unlockedFilePath}"`);
         return {
             status: 200,
@@ -72,10 +71,6 @@ async function UnlockUseCase(unlockInfos) {
             status: 400,
             message: "An error has occurred while trying to unlock the PDF!"
         };
-    }
-    finally {
-        fs_1.default.unlink(lockedFilePath, () => { });
-        fs_1.default.unlink(unlockedFilePath, () => { });
     }
 }
 // Main
