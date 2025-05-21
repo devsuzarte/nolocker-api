@@ -36,8 +36,6 @@ async function UnlockController(request, reply) {
         if (status !== 200) {
             return reply.status(status).send({ message, body });
         }
-        // fs.unlink(lockedFilePath, () => {})
-        // fs.unlink(unlockedFilePath, () => {})
         return reply
             .status(status)
             .header("content-type", "application/pdf")

@@ -1,4 +1,18 @@
+# Node
 node_modules
-dist
-storage
+npm-debug.log
+
+# TypeScript
+src/
+tsconfig.json
+
+# Output
+dist/ # (se você estiver buildando dentro do Docker, pode remover isso)
+
+# Configs e sensíveis
 .env
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+README.md
