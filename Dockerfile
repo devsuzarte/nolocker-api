@@ -1,6 +1,8 @@
 FROM node:22 AS build
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y qpdf && rm -rf /var/lib/apt/lists/*
+
 COPY package*.json ./
 RUN npm install
 
@@ -10,6 +12,8 @@ RUN npm run build
 
 FROM node:22 AS prod
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y qpdf && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/package.json ./

@@ -2,10 +2,6 @@
 node_modules
 npm-debug.log
 
-# TypeScript
-src/
-tsconfig.json
-
 # Output
 dist/ # (se você estiver buildando dentro do Docker, pode remover isso)
 

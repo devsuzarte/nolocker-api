@@ -94,6 +94,8 @@ async function UnlockUseCase(unlockInfos: UnlockInput): Promise<AppResponse> {
     } 
     
     catch (error) {
+        app.log.error(error)
+        console.log(error)
         return {
             status: 400,
             message: "An error has occurred while trying to unlock the PDF!"
@@ -105,12 +107,14 @@ async function UnlockUseCase(unlockInfos: UnlockInput): Promise<AppResponse> {
 async function main() {
     try {
 
-        await app.listen({ port: Number(process.env.PORT) })
+        await app.listen({ port: Number(process.env.PORT), host: "0.0.0.0" })
 
         console.log("Server is running...");
 
     } catch (error) {
         app.log.error(error)
+        console.log(error)
+        process.exit(1)
     }
 }
 
