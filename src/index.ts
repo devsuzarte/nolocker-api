@@ -7,6 +7,7 @@ import path from "path";
 import fs from "fs"
 
 import app from "./app";
+import { deleteFile } from "./utils";
 
 // Constraints
 const STORAGE_PATH = path.join(__dirname, "..", "cache")
@@ -100,6 +101,11 @@ async function UnlockUseCase(unlockInfos: UnlockInput): Promise<AppResponse> {
             status: 400,
             message: "An error has occurred while trying to unlock the PDF!"
         }
+    }
+
+    finally {
+        await deleteFile(lockedFilePath)
+        await deleteFile(unlockedFilePath)
     }
 }
 
